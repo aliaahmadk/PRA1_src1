@@ -16,7 +16,6 @@ char *color_end = "\033[00m";
 int main(int argc, char *argv[]) {
   
     long int i;
-    int sumTotal = 0;       //Variable to accumulate the total sum from all child processes
     char *args[] = {"./calculador_v1", "./calculador_v1", "1", "20"};
     pid_t pid;
     int estatWait;
