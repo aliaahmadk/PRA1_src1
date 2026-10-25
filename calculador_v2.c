@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    nomPrograma = argv;
+    nomPrograma = argv[0];
     terme_1 = atoll(argv[4]);
     terme_n = atoll(argv[5]);
 
@@ -59,13 +59,13 @@ int main(int argc, char *argv[])
     write(1, cadena, strlen(cadena));
 
     //PASO 2:
-    if (write(FD\_PIPE\_SUMES\_WRITE, &amp;sum, sizeof(sum)) &lt; 0) 
+    if (write(FD_PIPE_SUMES_WRITE, &sum, sizeof(sum)) < 0) 
     { 
         perror("Error en escriure el resultat a la pipeSumes"); 
         exit(1); 
     }
 
-    close(FD\_PIPE\_SUMES\_WRITE);
+    close(FD_PIPE_SUMES_WRITE);
 
     exit(0);
 }
