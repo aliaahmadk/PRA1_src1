@@ -1,3 +1,11 @@
+/* -----------------------------------------------------------------------
+ PRA1: Suma seqüència d’enters
+ Codi font: controlador_v2.c
+ 
+ Alia Ahmad Kousar.
+ Arantxa Ballester Ibarz.
+ ---------------------------------------------------------------------- */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
