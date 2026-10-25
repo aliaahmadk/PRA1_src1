@@ -40,6 +40,12 @@ int main(int argc, char *argv[]) {
 
     long long termesPerCalculador = (terme_n - terme_1 + 1) / numCalculadors;
 
+    if (pipe(pipeSumes) == -1) {
+        perror("Error al crear la tuberia pipeSumes");
+        exit(3);
+    }
+
+    // PRIMER BUCLE: Creació dels processos calculadors
     for (i = 0; i < numCalculadors; i++) {
         long double terme_1_Calculador = i * termesPerCalculador + terme_1;
         char terme_1_Calculador_Str[STRLONG];
@@ -53,11 +59,20 @@ int main(int argc, char *argv[]) {
         if (pid == -1){ // Error handling for fork failure
             sprintf(cadena, "%s%s - %d> Fill %ld error fork%s\n", color_red, nomPrograma, getpid(), i + 1, color_end);
             perror(cadena);
-            exit(3);
+            exit(4);
 
         } else if (pid == 0){ 
             // Codi del Fill
-            execl(args[0], args[1], terme_1_Calculador_Str, terme_n_Calculador_Str, NULL);
+            // Redireccionar extrem d'escriptura de pipeSumes al descriptor 20
+            dup2(pipeSumes[4], 20);
+
+            close(pipeSumes);
+            close(pipeSumes[4]);
+
+            // Executar el nou calculador\_v2
+            execl("./calculador_v2", "./calculador_v2", terme_1_Calculador_Str, terme_n_Calculador_Str, NULL);
+            perror("Error exec calculador_v2");
+            exit(5);
 
         } else {
             // Codi del Pare
@@ -66,34 +81,41 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // Aquesta variable s'inicialitza NOMÉS UNA VEGADA fora del bucle!
-    long long sumTotal = 0;
+    dup2(pipeSumes, 21);
 
-    // SEGON BUCLE: Sincronització
+    close(pipeSumes);
+    close(pipeSumes[4]);
+
+    // Aquestes variables s'inicialitzen NOMÉS UNA VEGADA fora del bucle!
+    long long sumTotal = 0;
+    long long suma_parcial = 0;
+
+    // SEGON BUCLE: Recepció de dades per la pipe i sincronització
     for (i = 0; i < numCalculadors; i++) {
+        if (read(21, &suma_parcial, sizeof(suma_parcial)) > 0) {
+            sumTotal += suma_parcial;
+        }
         
-        pid = wait(&estatWait);
-        
+        pid = wait(&estatWait);    
         if (pid == -1) {
             sprintf(cadena, "%s%s - %d> No existeixen fills.%s\n", color_blue, nomPrograma, getpid(), color_end);
             write(1, cadena, strlen(cadena));
-            exit(4);
+            exit(6);
         }
-
-        sumTotal += estatWait >> 8;     // We shift right by 8 bits to get the exit status of the child process, which contains the sum calculated by that child.
-        write(1, cadena, strlen(cadena));
 
         // FIX: Una sola impressió correcta per cada fill que mor
         sprintf(cadena, "%s%s - %d> Fill %d finalitzat. Suma rebuda: %d%s\n", color_blue, nomPrograma, getpid(), pid, suma_parcial, color_end);
         write(1, cadena, strlen(cadena));
     }
+
+    // Tancar el descriptor 21 després de finalitzar la recepció 
+    close(21);
     
     // COMPROVACIÓ FINAL
-    long long int sumForm = ((terme_1 + terme_n) / 2.0) * (terme_n + 1 - terme_1);
-
-    // FIX: Repaired string formatting for the final answer
-    sprintf(cadena, "\n%s%s - %d> Suma amb calculadors = %lld - Suma amb formula = %lld%s\n\n", color_blue, nomPrograma, getpid(), sumTotal, sumForm, color_end);
+    long long n\_terms = terme\_n - terme\_1 + 1; 
+    long long sumFormula = (terme\_1 + terme\_n) \* n\_terms / 2; 
+    sprintf(cadena, "%s%s - %d&gt; Suma total acumulada: %lld | Comprobación fórmula: %lld%s\\n", color\_blue, nomPrograma, getpid(), sumTotal, sumFormula, color\_end); 
     write(1, cadena, strlen(cadena));
     
-    return EXIT_SUCCESS;
+    return 0;
 }
