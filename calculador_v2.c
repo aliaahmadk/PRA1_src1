@@ -36,10 +36,10 @@ int main(int argc, char *argv[])
     }
 
     nomPrograma = argv[0];
-    terme_1 = atoll(argv[4]);
-    terme_n = atoll(argv[5]);
+    terme_1 = atoll(argv[1]);
+    terme_n = atoll(argv[2]);
 
-    sprintf(cadena, "%s%s - %d> Calcula progressio termes: %.0lld -> %.0lld %s\n", color_green, nomPrograma, getpid(), terme_1, terme_n, color_end);
+    sprintf(cadena, "%s%s - %d> Calcula progressio termes: %lld -> %lld %s\n", color_green, nomPrograma, getpid(), terme_1, terme_n, color_end);
     write(1, cadena, strlen(cadena));
 
     terme_i = terme_1;
