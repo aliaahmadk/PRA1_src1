@@ -50,3 +50,4 @@ int main(int argc, char *argv[])
     write(1, cadena, strlen(cadena));
 
     exit(sum);
+}
