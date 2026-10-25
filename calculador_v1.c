@@ -1,3 +1,11 @@
+/* -----------------------------------------------------------------------
+ PRA1: Suma seqüència d’enters
+ Codi font: calculador_v1.c
+ 
+ Alia Ahmad Kousar.
+ Arantxa Ballester Ibarz.
+ ---------------------------------------------------------------------- */
+
 #include <stdio.h>
 #include <stdlib.h>
 
