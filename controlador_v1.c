@@ -21,7 +21,8 @@ char *color_red = "\033[01;31m";
 char *color_blue = "\033[01;34m";
 char *color_end = "\033[00m";
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
   
     long int i;
     char *args[] = {"./calculador_v1", "./calculador_v1", "1", "20"};
@@ -48,7 +49,8 @@ int main(int argc, char *argv[]) {
 
     long long termesPerCalculador = (terme_n - terme_1 + 1) / numCalculadors;
 
-    for (i = 0; i < numCalculadors; i++) {
+    for (i = 0; i < numCalculadors; i++) 
+    {
         long double terme_1_Calculador = i * termesPerCalculador + terme_1;
         char terme_1_Calculador_Str[STRLONG];
         sprintf(terme_1_Calculador_Str, "%.0Lf", terme_1_Calculador);
@@ -58,16 +60,21 @@ int main(int argc, char *argv[]) {
         sprintf(terme_n_Calculador_Str, "%.0Lf", terme_n_Calculador);
 
         pid = fork();  
-        if (pid == -1){ // Error handling for fork failure
+        if (pid == -1) 
+        { // Error handling for fork failure
             sprintf(cadena, "%s%s - %d> Fill %ld error fork%s\n", color_red, nomPrograma, getpid(), i + 1, color_end);
             perror(cadena);
             exit(3);
 
-        } else if (pid == 0){ 
+        } 
+        else if (pid == 0) 
+        { 
             // Codi del Fill
             execl(args[0], args[1], terme_1_Calculador_Str, terme_n_Calculador_Str, NULL);
 
-        } else {
+        } 
+        else 
+        {
             // Codi del Pare
             sprintf(cadena, "%s%s - %d> Crea fill %ld [%d] Termes: %.0Lf -> %.0Lf %s\n", color_blue, nomPrograma, getpid(), i + 1, pid, terme_1_Calculador, terme_n_Calculador, color_end);
             write(1, cadena, strlen(cadena));
@@ -78,11 +85,13 @@ int main(int argc, char *argv[]) {
     long long sumTotal = 0;
 
     // SEGON BUCLE: Sincronització
-    for (i = 0; i < numCalculadors; i++) {
+    for (i = 0; i < numCalculadors; i++) 
+    {
         
         pid = wait(&estatWait);
         
-        if (pid == -1) {
+        if (pid == -1) 
+        {
             sprintf(cadena, "%s%s - %d> No existeixen fills.%s\n", color_blue, nomPrograma, getpid(), color_end);
             write(1, cadena, strlen(cadena));
             exit(4);
