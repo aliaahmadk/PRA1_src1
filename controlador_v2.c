@@ -21,7 +21,8 @@ char *color_red = "\033[01;31m";
 char *color_blue = "\033[01;34m";
 char *color_end = "\033[00m";
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
   
     long int i;
     pid_t pid;
@@ -49,13 +50,15 @@ int main(int argc, char *argv[]) {
 
     long long termesPerCalculador = (terme_n - terme_1 + 1) / numCalculadors;
 
-    if (pipe(pipeSumes) == -1) {
+    if (pipe(pipeSumes) == -1) 
+    {
         perror("Error al crear la tuberia pipeSumes");
         exit(3);
     }
 
     // PRIMER BUCLE: Creació dels processos calculadors
-    for (i = 0; i < numCalculadors; i++) {
+    for (i = 0; i < numCalculadors; i++) 
+    {
         long double terme_1_Calculador = i * termesPerCalculador + terme_1;
         char terme_1_Calculador_Str[STRLONG];
         sprintf(terme_1_Calculador_Str, "%.0Lf", terme_1_Calculador);
@@ -65,15 +68,19 @@ int main(int argc, char *argv[]) {
         sprintf(terme_n_Calculador_Str, "%.0Lf", terme_n_Calculador);
 
         pid = fork();  
-        if (pid == -1){ // Control de errores en fork
+        if (pid == -1) 
+        { // Control de errores en fork
             sprintf(cadena, "%s%s - %d> Fill %ld error fork%s\n", color_red, nomPrograma, getpid(), i + 1, color_end);
             perror(cadena);
             exit(4);
 
-        } else if (pid == 0){ 
+        } 
+        else if (pid == 0) 
+        { 
             // Codi del Fill
             // Redireccionar extrem d'escriptura de pipeSumes al descriptor 20
-            if (dup2(pipeSumes[1], 20) < 0){
+            if (dup2(pipeSumes[1], 20) < 0) 
+            {
                perror("Error dup2 en el hijo"); 
                exit(5); 
             }
@@ -86,14 +93,17 @@ int main(int argc, char *argv[]) {
             perror("Error exec calculador_v2");
             exit(5);
 
-        } else {
+        } 
+        else 
+        {
             // Codi del Pare
             sprintf(cadena, "%s%s - %d> Crea fill %ld [%d] Termes: %.0Lf -> %.0Lf %s\n", color_blue, nomPrograma, getpid(), i + 1, pid, terme_1_Calculador, terme_n_Calculador, color_end);
             write(1, cadena, strlen(cadena));
         }
     }
 
-    if (dup2(pipeSumes[0], 21) < 0) { 
+    if (dup2(pipeSumes[0], 21) < 0) 
+    { 
         perror("Error dup2 en el padre"); 
         exit(6); 
     }
@@ -106,13 +116,16 @@ int main(int argc, char *argv[]) {
     long long suma_parcial = 0;
 
     // SEGON BUCLE: Recepció de dades per la pipe i sincronització
-    for (i = 0; i < numCalculadors; i++) {
-        if (read(21, &suma_parcial, sizeof(suma_parcial)) > 0) {
+    for (i = 0; i < numCalculadors; i++) 
+    {
+        if (read(21, &suma_parcial, sizeof(suma_parcial)) > 0) 
+        {
             sumTotal += suma_parcial;
         }
         
         pid = wait(&estatWait);    
-        if (pid == -1) {
+        if (pid == -1) 
+        {
             sprintf(cadena, "%s%s - %d> No existeixen fills.%s\n", color_blue, nomPrograma, getpid(), color_end);
             write(1, cadena, strlen(cadena));
             exit(6);
