@@ -16,14 +16,14 @@
 #include <string.h>
 
 #define STRLONG 1024
-#define FD\_PIPE\_RANGS\_WRITE 10 // Descriptor d'escriptura de rangs 
-#define FD\_PIPE\_RANGS\_READ 11 // Descriptor de lectura de rangs
-#define FD\_PIPE\_SUMES\_WRITE 20 // Descriptor d'escriptura de sumes 
-#define FD\_PIPE\_SUMES\_READ 21 //Descriptor de lectura de sumes
+#define FD_PIPE_RANGS_WRITE 10
+#define FD_PIPE_RANGS_READ 11
+#define FD_PIPE_SUMES_WRITE 20
+#define FD_PIPE_SUMES_READ 21
 
 typedef struct 
-{   long long terme\_1; 
-    long long terme\_n; 
+{   long long terme_1;
+    long long terme_n;
 } t_rang;
 
 
@@ -46,11 +46,11 @@ int main(int argc, char *argv[])
 
     if (argc != 2)
     {
-        printf("Us: %s <nombre_calculadors>\n\n", argv);
+        printf("Us: %s <nombre_calculadors>\n\n", argv[0]);
         exit(1);
     }
     
-    nomPrograma = argv;
+    nomPrograma = argv[0];
 
     long long terme_1, terme_n, total_termes;
     unsigned int numCalculadors = atoi(argv[2]);

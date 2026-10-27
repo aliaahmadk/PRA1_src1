@@ -30,6 +30,8 @@ int main(int argc, char *argv[])
     int estatWait;
     char *nomPrograma;
     char cadena[STRLONG];
+    long long sumTotal = 0;
+    int suma_parcial = 0;
 
     if (argc != 4)
     {
@@ -75,34 +77,34 @@ int main(int argc, char *argv[])
         } 
         else 
         {
-            // Codi del Pare
+            
             sprintf(cadena, "%s%s - %d> Crea fill %ld [%d] Termes: %.0Lf -> %.0Lf %s\n", color_blue, nomPrograma, getpid(), i + 1, pid, terme_1_Calculador, terme_n_Calculador, color_end);
             write(1, cadena, strlen(cadena));
         }
     }
 
-    // Aquesta variable s'inicialitza NOMÉS UNA VEGADA fora del bucle!
-    long long sumTotal = 0;
+    
+    
 
     // SEGON BUCLE: Sincronització
-    for (i = 0; i < numCalculadors; i++) 
-    {
-        
+    for (i = 0; i < numCalculadors; i++)  {
         pid = wait(&estatWait);
         
-        if (pid == -1) 
+        if (pid == -1) // ERROR: No more child processes
         {
             sprintf(cadena, "%s%s - %d> No existeixen fills.%s\n", color_blue, nomPrograma, getpid(), color_end);
             write(1, cadena, strlen(cadena));
             exit(4);
         }
 
-        sumTotal += estatWait >> 8;     // We shift right by 8 bits to get the exit status of the child process, which contains the sum calculated by that child.
-        write(1, cadena, strlen(cadena));
+        sumTotal += estatWait >> 8;
 
         // FIX: Una sola impressió correcta per cada fill que mor
         sprintf(cadena, "%s%s - %d> Fill %d finalitzat. Suma rebuda: %d%s\n", color_blue, nomPrograma, getpid(), pid, suma_parcial, color_end);
         write(1, cadena, strlen(cadena));
+
+            
+        sumTotal += suma_parcial;
     }
     
     // COMPROVACIÓ FINAL
