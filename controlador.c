@@ -17,8 +17,7 @@ char *color_red = "\033[01;31m";
 char *color_blue = "\033[01;34m";
 char *color_end = "\033[00m";
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     long int i;
     char *args[] = {"./calculador", "./calculador", "1", "20"};
     pid_t pid;
@@ -26,13 +25,11 @@ int main(int argc, char *argv[])
     char *nomPrograma;
     char cadena[STRLONG];
 
-    if (argc != 4)
-    {
+    if (argc != 4) {
         printf("Us: %s <1r terme> <darrer terme> <nombre_calculadors>\n\n", argv[0]);
         exit(1);
     }
-    if ((atoll(argv[2]) - atoll(argv[1]) + 1) % atoll(argv[3]) != 0)
-    {
+    if ((atoll(argv[2]) - atoll(argv[1]) + 1) % atoll(argv[3]) != 0) {
         printf("Rang de valors no divisible entre el nombre de processos calculadors.\n");
         exit(2);
     }
@@ -44,8 +41,7 @@ int main(int argc, char *argv[])
 
     long long termesPerCalculador = (terme_n - terme_1 + 1) / numCalculadors;
 
-    for (i = 0; i < numCalculadors; i++)
-    {
+    for (i = 0; i < numCalculadors; i++) {
         long double terme_1_Calculador = i * termesPerCalculador + terme_1;
         char terme_1_Calculador_Str[STRLONG];
         sprintf(terme_1_Calculador_Str, "%.0Lf", terme_1_Calculador);
@@ -54,8 +50,8 @@ int main(int argc, char *argv[])
         char terme_n_Calculador_Str[STRLONG];
         sprintf(terme_n_Calculador_Str, "%.0Lf", terme_n_Calculador);
 
-        switch (pid = fork())
-        {
+        switch (pid = fork()) {
+
         case -1:
             sprintf(cadena, "%s%s - %d> Fill %ld error fork%s", color_red, nomPrograma, getpid(), i + 1, color_end);
             perror(cadena);
@@ -70,8 +66,7 @@ int main(int argc, char *argv[])
 
             pid = wait(&estatWait);
 
-            if (pid == -1)
-            {
+            if (pid == -1) {
                 sprintf(cadena, "%s%s - %d> No existeixen fills.%s\n", color_blue, nomPrograma, getpid(), color_end);
                 write(1, cadena, strlen(cadena));
                 exit(4);

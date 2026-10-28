@@ -13,15 +13,13 @@
 char *color_green = "\033[01;32m";
 char *color_end = "\033[00m";
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     long int i;
     long long sum = 0, sumForm, terme_i, terme_i_mes_1, terme_1, terme_n;
     char *nomPrograma;
     char cadena[STRLONG];
 
-    if (argc != 3)
-    {
+    if (argc != 3) {
         printf("Us: %s <1r terme> <darrer terme>\n\n", argv[0]);
         exit(1);
     }
@@ -37,8 +35,7 @@ int main(int argc, char *argv[])
     terme_i_mes_1 = terme_i + 1;
     sum = terme_i;
 
-    for (i = terme_1; i < terme_n; i++)
-    {
+    for (i = terme_1; i < terme_n; i++) {
         sum = sum + terme_i_mes_1;
         terme_i = terme_i_mes_1;
         terme_i_mes_1 = terme_i_mes_1 + 1;

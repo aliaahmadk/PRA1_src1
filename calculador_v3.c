@@ -12,7 +12,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <string.h>
+#include <string.h>     //For the strlen() function
 
 #define STRLONG 1024
 #define FD_PIPE_SUMES_WRITE 20 
@@ -27,8 +27,7 @@ typedef struct {
     long long terme_n;
 } t_rang;
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     long int i;
     long long sum = 0, sumForm, terme_i, terme_i_mes_1, terme_1, terme_n;
     char *nomPrograma = argv[0];
@@ -36,8 +35,7 @@ int main(int argc, char *argv[])
 
     t_rang rang;
 
-    while (read(FD_PIPE_RANGS_READ, &rang, sizeof(rang)) > 0)
-    {
+    while (read(FD_PIPE_RANGS_READ, &rang, sizeof(rang)) > 0) {
         terme_1 = rang.terme_1;
         terme_n = rang.terme_n;
 
@@ -48,8 +46,7 @@ int main(int argc, char *argv[])
         terme_i_mes_1 = terme_i + 1;
         sum = terme_i;
 
-        for (i = terme_1; i < terme_n; i++)
-        {
+        for (i = terme_1; i < terme_n; i++) {
             sum = sum + terme_i_mes_1;
             terme_i = terme_i_mes_1;
             terme_i_mes_1 = terme_i_mes_1 + 1;
@@ -60,8 +57,7 @@ int main(int argc, char *argv[])
         sprintf(cadena, "%s%s - %d> Suma amb bucle=%.0lld - Suma amb formula=%.0lld%s\n", color_green, nomPrograma, getpid(), sum, sumForm, color_end);
         write(1, cadena, strlen(cadena));
 
-        if (write(FD_PIPE_SUMES_WRITE, &sum, sizeof(sum)) < 0) 
-        { 
+        if (write(FD_PIPE_SUMES_WRITE, &sum, sizeof(sum)) < 0) { 
             perror("Error en escriure el resultat a la pipeSumes"); 
             exit(1); 
         }
