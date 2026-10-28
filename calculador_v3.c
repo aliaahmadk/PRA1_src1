@@ -35,13 +35,17 @@ int main(int argc, char *argv[]) {
 
     t_rang rang;
 
+
     while (read(FD_PIPE_RANGS_READ, &rang, sizeof(rang)) > 0) {
-        terme_1 = rang.terme_1;
+
+        
+        terme_1 = rang.terme_1; // Llegim els rangs de la pipe i calculem la suma per a cada rang
         terme_n = rang.terme_n;
 
         sprintf(cadena, "%s%s - %d> Calcula progressio termes: %lld -> %lld %s\n", color_green, nomPrograma, getpid(), terme_1, terme_n, color_end);
         write(1, cadena, strlen(cadena));
 
+        
         terme_i = terme_1;
         terme_i_mes_1 = terme_i + 1;
         sum = terme_i;
