@@ -1,6 +1,6 @@
 /* -----------------------------------------------------------------------
  PRA1: Suma seqüència d’enters
- Codi font: controlador_v3.c
+ Codi font: controlador_v4.c
  
  Alia Ahmad Kousar.
  Arantxa Ballester Ibarz.
