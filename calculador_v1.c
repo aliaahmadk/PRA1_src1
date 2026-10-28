@@ -56,3 +56,12 @@ int main(int argc, char *argv[]) {
 
     exit(sum);
 }
+
+/* -----------------------------------------------------------------------
+  Què passa?
+ 
+ Quan passem el resultat amb el wait() o l'exit(), el sistema només 
+ accepta números del 0 al 255 (8 bits). Si la suma és més gran (per 
+ exemple 292), el número es trenca i NO arriba correctament al pare. Per 
+ això amb el v1 no podem calcular sumes grans.
+ ----------------------------------------------------------------------- */
