@@ -1,6 +1,6 @@
 /* -----------------------------------------------------------------------
  PRA1: Suma seqüència d’enters
- Codi font: calculador_v3.c
+ Codi font: calculador_v4.c
  
  Alia Ahmad Kousar.
  Arantxa Ballester Ibarz.
@@ -28,7 +28,7 @@ typedef struct {
     long long terme_n;
 } t_rang;
 
-// Handler function for SIGTERM
+// Gestor de senyal SIGTERM (per tancar el calculador)
 void senyal_SIGTERM(int sig) {
     write(1, "Calculador tancat per SIGTERM\n", 30);
     exit(0); 
@@ -39,6 +39,7 @@ int main(int argc, char *argv[]) {
     long long sum = 0, sumForm, terme_i, terme_i_mes_1, terme_1, terme_n;
     char *nomPrograma = argv[0];
     char cadena[STRLONG];
+   
     t_rang rang;
 
     signal(SIGINT, SIG_IGN);
@@ -48,9 +49,13 @@ int main(int argc, char *argv[]) {
         exit(-1);
     }
 
-    while (read(FD_PIPE_RANGS_READ, &rang, sizeof(rang)) > 0) {
-        terme_1 = rang.terme_1;
-        terme_n = rang.terme_n;
+    
+    // Bucle principal: llegim els rangs de la pipe i calculem la suma per a cada rang
+    while (read(FD_PIPE_RANGS_READ, &rang, sizeof(rang)) > 0) {     
+        terme_1 = rang.terme_1; 
+        terme_n = rang.terme_n; 
+
+    
 
     sprintf(cadena, "%s%s - %d> Calcula progressio termes: %lld -> %lld %s\n", color_green, nomPrograma, getpid(), terme_1, terme_n, color_end);            
     write(1, cadena, strlen(cadena));
@@ -70,17 +75,17 @@ int main(int argc, char *argv[]) {
     sprintf(cadena, "%s%s - %d> Suma amb bucle=%lld - Suma amb formula=%lld%s\n", color_green, nomPrograma, getpid(), sum, sumForm, color_end);        
     write(1, cadena, strlen(cadena));
 
-        if (write(FD_PIPE_SUMES_WRITE, &sum, sizeof(sum)) < 0) { 
+        if (write(FD_PIPE_SUMES_WRITE, &sum, sizeof(sum)) < 0) {  // Enviament de resultats per la canonada
             perror("Error en escriure el resultat a la pipeSumes"); 
             exit(1); 
         }
     }
     
     // Quan el read dona 0 (el controlador no envia més feina), sortim del bucle.
-    close(FD_PIPE_RANGS_READ);  // <-- Inspo 1: Tanquem el tub de lectura (11)
+    close(FD_PIPE_RANGS_READ);  // Tanquem el tub de lectura (11)
     close(FD_PIPE_SUMES_WRITE); // Tanquem el tub d'escriptura (20)
     
-    exit(EXIT_SUCCESS);         // <-- Inspo 2: Macro oficial d'èxit exigida al document
+    exit(EXIT_SUCCESS);         // Macro oficial d'èxit exigida al document
 
 
 }

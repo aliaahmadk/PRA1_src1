@@ -64,10 +64,10 @@ int main(int argc, char *argv[]) {
     }
     
     // Quan el read dona 0 (el controlador no envia més feina), sortim del bucle.
-    close(FD_PIPE_RANGS_READ);  // <-- Inspo 1: Tanquem el tub de lectura (11)
+    close(FD_PIPE_RANGS_READ);  // Tanquem el tub de lectura (11)
     close(FD_PIPE_SUMES_WRITE); // Tanquem el tub d'escriptura (20)
     
-    exit(EXIT_SUCCESS);         // <-- Inspo 2: Macro oficial d'èxit exigida al document
+    exit(EXIT_SUCCESS);         // Macro oficial d'èxit exigida al document
 
 
 }
